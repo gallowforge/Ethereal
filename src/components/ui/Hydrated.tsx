@@ -1,6 +1,6 @@
 import type { ComponentChildren } from 'preact';
 import { useEffect, useState } from 'preact/hooks';
-import { ClientOnly } from '@/lib/client-only';
+import { ClientOnly } from '@/lib/store';
 
 /**
  * Shows `fallback` until the browser has taken over, then the real thing.

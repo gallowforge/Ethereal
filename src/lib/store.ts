@@ -2,8 +2,17 @@
  * Tiny persistent store factory on top of localStorage with a subscribe/hook API.
  * All user data (profile, plan, weigh-ins) lives in the browser only.
  */
+import { createContext } from 'preact';
 import { useContext, useEffect, useState } from 'preact/hooks';
-import { ClientOnly } from './client-only';
+
+/**
+ * True inside a subtree the server never rendered (see `Hydrated`). There, stores can hand out
+ * the saved value on the very first render: there is no server HTML to match, and starting from
+ * defaults would paint one frame of someone else's numbers before the real ones arrive.
+ * It lives here, not in a module of its own, because every island already loads this file: a
+ * separate one-line module became its own chunk, one more round trip before Today could paint.
+ */
+export const ClientOnly = createContext(false);
 
 export interface Store<T> {
   key: string;

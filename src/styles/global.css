@@ -2402,7 +2402,15 @@
   padding: 0;
   overflow: hidden;
   background: var(--bg-elevated);
-  animation: var(--animate-rise);
+  /* Rises in, but never from zero opacity: its greeting line is often Today's largest paint,
+     and a fade from nothing holds the largest-paint time back until the animation ends. */
+  animation: today-hero-in 0.6s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+}
+@keyframes today-hero-in {
+  from {
+    opacity: 0.6;
+    transform: translateY(12px);
+  }
 }
 [data-theme='dark'] .today-hero {
   background: oklch(19% 0.01 255);

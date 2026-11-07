@@ -4,7 +4,7 @@
  * Nothing leaves the browser.
  */
 import { useContext, useEffect, useState } from 'preact/hooks';
-import { ClientOnly } from './client-only';
+import { ClientOnly } from './store';
 import type { ActivityLevel } from './calc/energy';
 import type { Sex, UnitSystem } from './calc/units';
 
