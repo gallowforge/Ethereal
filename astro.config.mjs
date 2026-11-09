@@ -9,7 +9,7 @@ import tailwindcss from '@tailwindcss/vite';
  * Set it in CI / your host's environment (e.g. https://ethereal.example.com).
  * BASE_PATH is only needed when hosting under a sub-path (e.g. GitHub project pages).
  */
-const site = process.env.SITE_URL ?? 'https://ethereal.pages.dev';
+const site = process.env.SITE_URL ?? 'https://gallowforge.github.io';
 const base = process.env.BASE_PATH ?? '/';
 
 export default defineConfig({

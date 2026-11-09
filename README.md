@@ -184,8 +184,8 @@ Your plan, diary, weigh-ins, training, profile and preferences live in `localSto
 
 | Check                 | What it covers                                                                                                                                                                  |
 | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 218 unit tests        | Every calculation, the trend and adjustment engine, insights, CSV import, the planners, food search, the exercise figures, training progression, prayer times and the day plan. |
-| 162 end-to-end tests  | Desktop and phone: first run, Today's plan, a workout from setup to diary, diary, planner, review, import, eating out, the tab bar, and an accessibility sweep.                 |
+| 228 unit tests        | Every calculation, the trend and adjustment engine, insights, CSV import, the planners, food search, the exercise figures, training progression, prayer times and the day plan. |
+| 164 end-to-end tests  | Desktop and phone: first run, Today's plan, a workout from setup to diary, diary, planner, review, import, eating out, the tab bar, and an accessibility sweep.                 |
 | Lighthouse CI         | Performance budgets on a simulated slow phone; key pages score 100.                                                                                                             |
 | Data validators       | Every food and recipe checked for shape, plausibility and energy consistency on each build.                                                                                     |
 | Type check and format | `astro check` in strict mode and Prettier across the tree.                                                                                                                      |

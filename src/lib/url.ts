@@ -15,6 +15,6 @@ export function withBase(path: string): string {
 
 /** Absolute URL for canonicals, sitemaps and JSON-LD. `site` is the deployment origin. */
 export function absoluteUrl(path: string, site: URL | undefined): string {
-  const origin = site ?? new URL('https://ethereal.pages.dev');
+  const origin = site ?? new URL('https://gallowforge.github.io');
   return new URL(withBase(path), origin).toString();
 }

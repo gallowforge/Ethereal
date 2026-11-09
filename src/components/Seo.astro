@@ -27,7 +27,7 @@ const {
   noindex = false,
   jsonLd = [],
 } = Astro.props;
-const site = Astro.site ?? new URL('https://ethereal.pages.dev');
+const site = Astro.site ?? new URL('https://gallowforge.github.io');
 const canonical = path ? absoluteUrl(path, site) : new URL(Astro.url.pathname, site).toString();
 const imageUrl = absoluteUrl(image, site);
 const homeUrl = absoluteUrl('/', site);

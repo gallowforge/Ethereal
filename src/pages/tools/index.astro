@@ -5,7 +5,7 @@ import { TOOLS } from '@/lib/tools';
 import { absoluteUrl } from '@/lib/url';
 
 const tools = [...TOOLS].sort((a, b) => a.order - b.order);
-const site = Astro.site ?? new URL('https://ethereal.pages.dev');
+const site = Astro.site ?? new URL('https://gallowforge.github.io');
 const jsonLd = [
   {
     '@type': 'ItemList',

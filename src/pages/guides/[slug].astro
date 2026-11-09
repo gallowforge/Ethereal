@@ -18,7 +18,7 @@ export async function getStaticPaths() {
 const { guide } = Astro.props;
 const { Content, headings } = await render(guide);
 const path = `/guides/${guide.id}/`;
-const site = Astro.site ?? new URL('https://ethereal.pages.dev');
+const site = Astro.site ?? new URL('https://gallowforge.github.io');
 const minutes = readingTime(guide.body ?? '');
 const related = guide.data.relatedTools.map(toolBySlug).filter((t) => t !== undefined);
 const toc = headings.filter((h) => h.depth === 2);

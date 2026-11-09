@@ -21,7 +21,7 @@ const { slug, title, description, lede, faq } = Astro.props;
 const tool = toolBySlug(slug);
 if (!tool) throw new Error(`Unknown tool: ${slug}`);
 const path = `/tools/${slug}/`;
-const site = Astro.site ?? new URL('https://ethereal.pages.dev');
+const site = Astro.site ?? new URL('https://gallowforge.github.io');
 
 const related = TOOLS.filter((t) => t.slug !== slug)
   .sort((a, b) => a.order - b.order)
