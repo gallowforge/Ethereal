@@ -336,25 +336,34 @@ export function buildDay(ctx: DayContext): DayItem[] {
     detail: 'The same time most nights matters more than the hour.',
   });
 
-  // Order by time across the day, which starts at wake-up or Fajr, whichever is earlier; a
-  // bedtime after midnight sorts last.
-  const start = Math.min(toMinutes(life.wake), fajr ?? Infinity) - 30;
+  // Order by time across the day (see dayStart); a bedtime after midnight sorts last.
+  const start = dayStart(life.wake, fajr, fasting);
   const key = (t: string) => (toMinutes(t) - start + 1440) % 1440;
   return items.sort((a, b) => key(a.time) - key(b.time) || (a.kind === 'wake' ? -1 : 0));
 }
 
 /**
- * Which day's plan is live at a moment. The calendar turns at midnight, but a day starts half an
- * hour before wake-up or Fajr, whichever is earlier: until then the night still belongs to the
- * day before (its bedtime may still be ahead), and nothing of the new day has happened yet.
+ * Where a day starts, in minutes: half an hour before its first moment, which is wake-up, Fajr,
+ * or suhoor (40 minutes before Fajr) when fasting, whichever is earliest.
+ */
+export function dayStart(wake: string, fajr: number | null, fasting = false): number {
+  const first = fajr === null ? Infinity : fasting ? fajr - 40 : fajr;
+  return Math.min(toMinutes(wake), first) - 30;
+}
+
+/**
+ * Which day's plan is live at a moment. The calendar turns at midnight, but a day starts at
+ * dayStart: until then the night still belongs to the day before (its bedtime may still be
+ * ahead), and nothing of the new day has happened yet.
  */
 export function liveDay(
   calendarDate: string,
   nowMinutes: number,
   wake: string,
   fajr: number | null = null,
+  fasting = false,
 ): { date: string; night: boolean } {
-  const start = Math.min(toMinutes(wake), fajr ?? Infinity) - 30;
+  const start = dayStart(wake, fajr, fasting);
   if (nowMinutes >= start) return { date: calendarDate, night: false };
   const d = new Date(`${calendarDate}T12:00:00Z`);
   d.setUTCDate(d.getUTCDate() - 1);

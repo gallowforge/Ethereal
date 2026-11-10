@@ -149,7 +149,7 @@ function TodayPlanInner() {
           })
         : null;
     const fajr = t ? t.fajr.getHours() * 60 + t.fajr.getMinutes() : null;
-    return liveDay(calendar, now, life.wake, fajr);
+    return liveDay(calendar, now, life.wake, fajr, !!t && life.fasting);
   }, [calendar, now, life.wake, life.prayer, life.fasting]);
 
   const day = useMemo(() => {

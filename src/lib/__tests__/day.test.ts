@@ -99,7 +99,8 @@ describe('today plan', () => {
     const iftar = day.find((i) => i.title === 'Iftar')!;
     const maghrib = day.find((i) => i.title === 'Maghrib')!;
     expect(iftar.time).toBe(maghrib.time);
-    expect(day.find((i) => i.title === 'Suhoor')).toBeTruthy();
+    // Suhoor opens the day instead of sorting after bedtime.
+    expect(day[0]!.title).toBe('Suhoor');
     const w = day.find((i) => i.kind === 'workout')!;
     expect(toMinutes(w.time)).toBe(toMinutes(maghrib.time) + 90);
   });
@@ -133,5 +134,9 @@ describe('today plan', () => {
       false,
     );
     expect(liveDay('2027-01-01', toMinutes('02:00'), '07:00').date).toBe('2026-12-31');
+    // Fasting, suhoor (40 minutes before Fajr) belongs to the new day, not the night before.
+    expect(liveDay('2026-11-02', toMinutes('04:20'), '07:00', toMinutes('05:00'), true).night).toBe(
+      false,
+    );
   });
 });
