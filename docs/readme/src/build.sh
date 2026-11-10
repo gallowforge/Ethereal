@@ -31,9 +31,9 @@ loop() {
 }
 
 for t in dark light; do
-  # The hero: 7.2 s, three loops of the push-up demo while the glass drifts once; still on phones.
+  # The hero: 7.2 s, three loops of the push-up demo while the glass drifts once, wide and on phones.
   loop hero "$t" "hero-$t" 72 10 "$([[ $t == dark ]] && echo 62 || echo 58)"
-  still hero-phone "$t" "hero-$t-phone" 84
+  loop hero-phone "$t" "hero-$t-phone" 72 10 50
   still numbers "$t" "numbers-$t" 90
   still numbers-phone "$t" "numbers-$t-phone" 88
   # The workout player's demo is the real one: one 2.4 s loop of the knee push-up.
