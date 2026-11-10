@@ -1,6 +1,6 @@
 {
   "name": "ethereal",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
   "type": "module",
   "description": "Offline-first health and fitness coach: a daily plan, guided home workouts and food tracking. Private by design, no account.",
