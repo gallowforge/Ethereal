@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Ethereal — free, science-backed weight-loss calculators and guides.",
+  "description": "Offline-first health and fitness coach: a daily plan, guided home workouts and food tracking. Private by design, no account.",
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
