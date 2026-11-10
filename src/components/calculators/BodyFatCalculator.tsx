@@ -137,6 +137,7 @@ export default function BodyFatCalculator() {
                 label: b.label
                   .replace('Essential fat', 'Essential')
                   .replace('Above average', 'High'),
+                short: b.label === 'Fitness' ? 'Fit' : undefined,
                 color: BAND_COLORS[i]!,
               }))}
               format={(v) => `${v.toFixed(1)}%`}

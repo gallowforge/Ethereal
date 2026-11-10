@@ -83,7 +83,7 @@ export default function ExerciseLibrary() {
                 />
               </span>
               <span class="flex flex-1 flex-col gap-1 p-3 sm:p-4">
-                <span class="flex flex-wrap items-baseline justify-between gap-x-2">
+                <span class="flex flex-col gap-x-2 sm:flex-row sm:flex-wrap sm:items-baseline sm:justify-between">
                   <span class="leading-snug font-bold tracking-tight">{e.name}</span>
                   <span class="text-subtle text-xs font-semibold">{LEVEL[e.level]}</span>
                 </span>

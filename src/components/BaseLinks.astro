@@ -1,13 +1,15 @@
 ---
 /**
  * Rewrites root-relative links and images in rendered Markdown so guide articles can link
- * to "/tools/calories/" and still resolve correctly under a sub-path deployment.
- * A no-op when the site is served from the domain root.
+ * to "/tools/calories/" and still resolve correctly under a sub-path deployment (a no-op when
+ * the site is served from the domain root). Tables get a tab stop too: on a phone they scroll
+ * sideways, and a keyboard needs to be able to reach them to scroll them.
  */
 import { BASE } from '@/lib/url';
 
 const html = await Astro.slots.render('default');
-const fixed = BASE ? html.replace(/\b(href|src)="\/(?!\/)/g, `$1="${BASE}/`) : html;
+const linked = BASE ? html.replace(/\b(href|src)="\/(?!\/)/g, `$1="${BASE}/`) : html;
+const fixed = linked.replace(/<table>/g, '<table tabindex="0">');
 ---
 
 <Fragment set:html={fixed} />

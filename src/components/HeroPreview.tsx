@@ -34,36 +34,26 @@ const clock = (m: number) => {
   });
 };
 
-/** A believable slice of the day around a minute: two done, the next one, then one later. */
+/** A typical day, at the hours most people keep. */
+const TYPICAL_DAY: Array<{ title: string; icon: IconName; at: number }> = [
+  { title: 'Wake up, water first', icon: 'sun', at: 6 * 60 + 45 },
+  { title: 'Breakfast', icon: 'utensils', at: 7 * 60 + 30 },
+  { title: 'Morning walk', icon: 'walk', at: 8 * 60 + 10 },
+  { title: 'Lunch', icon: 'utensils', at: 12 * 60 + 40 },
+  { title: 'Home workout', icon: 'dumbbell', at: 17 * 60 + 30 },
+  { title: 'Dinner', icon: 'utensils', at: 19 * 60 + 30 },
+  { title: 'Wind down', icon: 'leaf', at: 22 * 60 + 15 },
+  { title: 'Lights out', icon: 'bed', at: 23 * 60 },
+];
+
+/** A believable slice of that day around a minute: two done, the next one, then one later.
+ *  The times are the day's own, so the small hours never show lunch at breakfast time. */
 function sliceOfDay(now: number): Array<{ title: string; icon: IconName; at: number }> {
-  const at = (d: number) => Math.round((now + d) / 5) * 5;
-  if (now >= 300 && now < 660)
-    return [
-      { title: 'Wake up, water first', icon: 'sun', at: at(-110) },
-      { title: 'Breakfast', icon: 'utensils', at: at(-50) },
-      { title: 'Morning walk', icon: 'walk', at: at(25) },
-      { title: 'Lunch', icon: 'utensils', at: at(200) },
-    ];
-  if (now >= 660 && now < 1020)
-    return [
-      { title: 'Lunch', icon: 'utensils', at: at(-120) },
-      { title: 'Home workout', icon: 'dumbbell', at: at(-45) },
-      { title: 'Afternoon walk', icon: 'walk', at: at(25) },
-      { title: 'Dinner', icon: 'utensils', at: at(170) },
-    ];
-  if (now >= 1020 && now < 1320)
-    return [
-      { title: 'Home workout', icon: 'dumbbell', at: at(-130) },
-      { title: 'Dinner', icon: 'utensils', at: at(-50) },
-      { title: 'Wind down', icon: 'leaf', at: at(25) },
-      { title: 'Lights out', icon: 'bed', at: at(110) },
-    ];
-  return [
-    { title: 'Dinner', icon: 'utensils', at: at(-150) },
-    { title: 'Wind down', icon: 'leaf', at: at(-40) },
-    { title: 'Lights out', icon: 'bed', at: at(20) },
-    { title: 'Wake up', icon: 'sun', at: at(420) },
-  ];
+  const n = TYPICAL_DAY.length;
+  const next = TYPICAL_DAY.findIndex((s) => s.at > now);
+  // After lights out, tomorrow's wake-up is next.
+  const i = next === -1 ? 0 : next;
+  return [-2, -1, 0, 1].map((d) => TYPICAL_DAY[(i + d + n) % n]!);
 }
 
 function TodayScreen({ now, t }: { now: number; t: number }) {
@@ -319,7 +309,9 @@ export default function HeroPreview() {
             aria-label={`Show ${s.label}`}
             onClick={() => go(n)}
           >
-            {n === i && !still && <span style={{ transform: `scaleX(${t})` }} aria-hidden="true" />}
+            <span class="hero-pager-pip" aria-hidden="true">
+              {n === i && !still && <span style={{ transform: `scaleX(${t})` }} />}
+            </span>
           </button>
         ))}
       </div>

@@ -116,7 +116,7 @@ function MilestonesInner({ celebrateOnly = false }: { celebrateOnly?: boolean })
           {done} of {sorted.length}
         </span>
       </div>
-      <ul class="stagger mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+      <ul class="stagger mt-4 grid grid-cols-[repeat(auto-fill,minmax(min(14rem,100%),1fr))] gap-2">
         {shown.map((a, i) => (
           <li key={a.id} class={`milestone ${a.on ? 'milestone-done' : ''}`} style={{ '--i': i }}>
             <span class={`milestone-icon ${a.on ? 'milestone-on' : ''}`} aria-hidden="true">

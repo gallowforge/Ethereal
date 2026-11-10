@@ -32,6 +32,7 @@ export default function BmiCalculator() {
   const bands = BMI_BANDS.map((b) => ({
     max: b.max,
     label: b.label.replace('Obesity class', 'Class').replace('Healthy weight', 'Healthy'),
+    short: /^(Under|Over)weight$/.test(b.label) ? b.label.slice(0, -6) : undefined,
     color: COLORS[b.category]!,
   }));
 

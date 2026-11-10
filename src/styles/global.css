@@ -3019,11 +3019,17 @@
 .hero-pager {
   display: flex;
   justify-content: center;
-  gap: 0.4rem;
-  margin-top: 1.1rem;
+  margin-top: 0.6rem;
 }
+/* A 24 px target around each small pip, so a thumb can land on it. */
 .hero-pager-dot {
+  display: grid;
+  place-items: center;
+  padding: 0.5rem;
+}
+.hero-pager-pip {
   position: relative;
+  display: block;
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 999px;
@@ -3031,23 +3037,23 @@
   background: color-mix(in oklab, var(--fg) 18%, transparent);
   transition: width 0.35s var(--ease-spring);
 }
-.hero-pager-dot.is-on {
+.hero-pager-dot.is-on .hero-pager-pip {
   width: 1.75rem;
 }
-.hero-pager-dot > span {
+.hero-pager-pip > span {
   position: absolute;
   inset: 0;
   background: var(--color-brand-500);
   transform-origin: left;
 }
-.hero-pager-dot.is-on:not(:has(span)) {
+.hero-pager-dot.is-on .hero-pager-pip:not(:has(span)) {
   background: var(--color-brand-500);
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-screen,
   .hero-meal,
   .hero-best,
-  .hero-pager-dot {
+  .hero-pager-pip {
     transition: none;
   }
   .hero-meal.is-in,

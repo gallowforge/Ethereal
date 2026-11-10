@@ -2,6 +2,8 @@ export interface GaugeBand {
   /** Upper bound of the band (in the gauge's units). */
   max: number;
   label: string;
+  /** A shorter label for narrow screens, when the band is too slim for the full one. */
+  short?: string;
   color: string;
 }
 
@@ -63,7 +65,14 @@ export function Gauge({ value, min, max, bands, format = String, markerLabel }: 
                 class="absolute truncate text-center"
                 style={{ left: `${left}%`, width: `${width}%` }}
               >
-                {b.label}
+                {b.short ? (
+                  <>
+                    <span class="sm:hidden">{b.short}</span>
+                    <span class="hidden sm:inline">{b.label}</span>
+                  </>
+                ) : (
+                  b.label
+                )}
               </span>
             );
           });
