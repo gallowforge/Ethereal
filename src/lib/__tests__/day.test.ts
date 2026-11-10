@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { buildDay, missedItems, nowItem, workoutSlot, type DayContext } from '../day';
+import { buildDay, liveDay, missedItems, nowItem, workoutSlot, type DayContext } from '../day';
 import { DEFAULT_LIFE, toMinutes, type Life } from '../life';
 import { prayerTimes } from '../prayer';
 
@@ -115,5 +115,23 @@ describe('today plan', () => {
     expect(missed).not.toContain('meal-breakfast');
     // After midnight but before wake, the day is still "today" and lights out is past.
     expect(nowItem(day, toMinutes('23:50'))).toBeNull();
+  });
+
+  it('keeps the small hours with the day before, until the new day starts', () => {
+    // Wake at 07:00: the new day starts at 06:30.
+    expect(liveDay('2026-11-02', toMinutes('00:30'), '07:00')).toEqual({
+      date: '2026-11-01',
+      night: true,
+    });
+    expect(liveDay('2026-11-02', toMinutes('06:29'), '07:00').date).toBe('2026-11-01');
+    expect(liveDay('2026-11-02', toMinutes('06:30'), '07:00')).toEqual({
+      date: '2026-11-02',
+      night: false,
+    });
+    // An earlier Fajr starts the day earlier; month and year boundaries roll back cleanly.
+    expect(liveDay('2026-11-02', toMinutes('05:00'), '07:00', toMinutes('05:10')).night).toBe(
+      false,
+    );
+    expect(liveDay('2027-01-01', toMinutes('02:00'), '07:00').date).toBe('2026-12-31');
   });
 });

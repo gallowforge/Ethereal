@@ -1,16 +1,16 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('today plan', () => {
-  test.use({ timezoneId: 'Asia/Kuwait' });
+  test.use({ timezoneId: 'UTC' });
 
   test('shows what to do now, ticks it off, and opens the right meal sheet', async ({ page }) => {
-    await page.clock.setFixedTime(new Date('2026-11-01T13:50:00+03:00'));
+    await page.clock.setFixedTime(new Date('2026-11-01T13:50:00Z'));
     await page.addInitScript(() => {
       localStorage.setItem('ethereal:tour:v1', '1');
       localStorage.setItem(
         'ethereal:life:v1',
         JSON.stringify({
-          name: 'Ali',
+          name: 'Sara',
           goals: ['get-stronger'],
           wake: '07:00',
           sleep: '23:30',
@@ -21,7 +21,7 @@ test.describe('today plan', () => {
     });
     await page.goto('/today/');
     await expect(page.locator('astro-island[ssr]:not([client="visible"])')).toHaveCount(0);
-    await expect(page.getByRole('heading', { name: 'Good afternoon, Ali' })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Good afternoon, Sara' })).toBeVisible();
     const now = page.getByRole('region', { name: "What's next" });
     await expect(now.getByRole('heading', { name: 'Lunch' })).toBeVisible();
     await expect(now).toContainText(/in 10 min/i);
@@ -46,13 +46,13 @@ test.describe('today plan', () => {
   });
 
   test('the whole day lists prayers when they are on', async ({ page }) => {
-    await page.clock.setFixedTime(new Date('2026-11-01T09:00:00+03:00'));
+    await page.clock.setFixedTime(new Date('2026-11-01T09:00:00Z'));
     await page.addInitScript(() => {
       localStorage.setItem('ethereal:tour:v1', '1');
       localStorage.setItem(
         'ethereal:life:v1',
         JSON.stringify({
-          prayer: { on: true, city: 'Kuwait City', lat: 29.3759, lon: 47.9774, method: 'kuwait' },
+          prayer: { on: true, city: 'London', lat: 51.5074, lon: -0.1278, method: 'mwl' },
         }),
       );
     });
@@ -78,8 +78,27 @@ test.describe('today plan', () => {
     await expect(page.getByRole('button', { name: 'Dhuhr: done' })).toBeVisible();
   });
 
+  test('after midnight the plan is still last night, not a day already missed', async ({
+    page,
+  }) => {
+    await page.clock.setFixedTime(new Date('2026-11-02T00:30:00Z'));
+    await page.addInitScript(() => {
+      localStorage.setItem('ethereal:tour:v1', '1');
+      localStorage.setItem(
+        'ethereal:life:v1',
+        JSON.stringify({ name: 'Sara', goals: ['get-stronger'], wake: '07:00', ready: true }),
+      );
+    });
+    await page.goto('/today/');
+    await expect(page.locator('astro-island[ssr]:not([client="visible"])')).toHaveCount(0);
+    await expect(page.getByRole('heading', { name: 'Still up, Sara' })).toBeVisible();
+    await expect(
+      page.getByRole('heading', { name: 'Rest now. Your day starts at 7:00 AM.' }),
+    ).toBeVisible();
+  });
+
   test('one good thing at night is shown back the next morning', async ({ page }) => {
-    await page.clock.setFixedTime(new Date('2026-11-01T22:20:00+03:00'));
+    await page.clock.setFixedTime(new Date('2026-11-01T22:20:00Z'));
     await page.addInitScript(() => localStorage.setItem('ethereal:tour:v1', '1'));
     await page.goto('/today/');
     const now = page.getByRole('region', { name: "What's next" });
@@ -88,7 +107,7 @@ test.describe('today plan', () => {
     await now.getByRole('button', { name: 'Keep' }).click();
     await expect(now.getByText('“Walked with my son after dinner”')).toBeVisible();
 
-    await page.clock.setFixedTime(new Date('2026-11-02T08:00:00+03:00'));
+    await page.clock.setFixedTime(new Date('2026-11-02T08:00:00Z'));
     await page.reload();
     await expect(page.getByText('Yesterday, your good thing')).toBeVisible();
     await expect(page.getByText('“Walked with my son after dinner”')).toBeVisible();

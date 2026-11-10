@@ -1,7 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks';
 import { bodyStore } from '@/lib/body';
 import { activity, exerciseKcal } from '@/lib/calc/exercise';
-import { buildDay, dayStore, missedItems, nowItem, toggleTick, type DayItem } from '@/lib/day';
+import {
+  buildDay,
+  dayStore,
+  liveDay,
+  missedItems,
+  nowItem,
+  toggleTick,
+  type DayItem,
+} from '@/lib/day';
 import { addExercise, diaryStore } from '@/lib/food-store';
 import { confetti, haptic } from '@/lib/fx';
 import { lifeStore, toMinutes } from '@/lib/life';
@@ -92,7 +100,7 @@ function TodayPlanInner() {
   const [body] = bodyStore.use();
   const [profile] = useProfile();
   const [{ goods }] = mindStore.use();
-  const [date, setDate] = useState('');
+  const [calendar, setCalendar] = useState('');
   const [now, setNow] = useState(0);
   const [lastPhoto, setLastPhoto] = useState<string | null | undefined>(undefined);
   const [all, setAll] = useState(false);
@@ -102,7 +110,7 @@ function TodayPlanInner() {
   // A live clock: the Now card moves on by itself, and a new day starts at midnight.
   useEffect(() => {
     const tick = () => {
-      setDate(todayIso());
+      setCalendar(todayIso());
       setNow(minutesNow());
     };
     tick();
@@ -127,6 +135,22 @@ function TodayPlanInner() {
       )
       .catch(() => setLastPhoto(null));
   }, []);
+
+  // After midnight and before the day starts, the plan on screen is still last night's.
+  const { date, night } = useMemo(() => {
+    if (!calendar) return { date: '', night: false };
+    const p = life.prayer;
+    const t =
+      p.on && p.lat !== null && p.lon !== null
+        ? prayerTimes(calendar, p.lat, p.lon, {
+            method: p.method,
+            asr: p.asr,
+            ramadan: life.fasting,
+          })
+        : null;
+    const fajr = t ? t.fajr.getHours() * 60 + t.fajr.getMinutes() : null;
+    return liveDay(calendar, now, life.wake, fajr);
+  }, [calendar, now, life.wake, life.prayer, life.fasting]);
 
   const day = useMemo(() => {
     if (!date) return null;
@@ -214,21 +238,29 @@ function TodayPlanInner() {
     return <div class="surface mb-8 h-[54rem] animate-pulse sm:h-[46rem]" aria-hidden="true" />;
 
   const current = nowItem(day, now);
-  // On the day you set up, nothing from before you arrived is "missed".
-  const joined = life.joinedAt ? new Date(life.joinedAt) : null;
-  const joinedToday = joined !== null && todayIso(joined) === date;
-  const missed = missedItems(day, now).filter(
-    (i) =>
-      i.id !== current?.id &&
-      !(joinedToday && toMinutes(i.time) < joined!.getHours() * 60 + joined!.getMinutes()),
-  );
+  // Nothing from before you set up is "missed", and a plan you have not made yours yet has
+  // nothing to catch up on. A bedtime after midnight belongs to the next calendar day.
+  const joined = life.joinedAt ? Date.parse(life.joinedAt) : null;
+  const dayStart = toMinutes(day[0]?.time ?? '00:00') - 30;
+  const at = (i: DayItem) => {
+    const m = toMinutes(i.time);
+    const d = new Date(`${date}T00:00:00`);
+    d.setMinutes(m < dayStart ? m + 1440 : m);
+    return d.getTime();
+  };
+  const missed =
+    life.ready || life.goals.length > 0
+      ? missedItems(day, now).filter(
+          (i) => i.id !== current?.id && (joined === null || at(i) >= joined),
+        )
+      : [];
   const actionable = day.filter((i) => !i.passive);
   const doneCount = actionable.filter((i) => i.done).length;
   const upcoming = current ? day.slice(day.indexOf(current) + 1).filter((i) => !i.done) : [];
   const shown = all ? day : upcoming.slice(0, 3);
   const why = life.why.trim();
   // Mornings start with what you said was good last night.
-  const echo = now < 720 ? lastGood(goods, date) : null;
+  const echo = !night && now < 720 ? lastGood(goods, date) : null;
   const picked = sel ? (day.find((i) => i.id === sel) ?? null) : null;
 
   const tick = (item: DayItem) => {
@@ -244,7 +276,7 @@ function TodayPlanInner() {
           <div class="flex items-start justify-between gap-3">
             <div class="min-w-0">
               <p class="sky-eyebrow">
-                {new Date(`${date}T12:00:00`).toLocaleDateString('en', {
+                {new Date(`${calendar}T12:00:00`).toLocaleDateString('en', {
                   weekday: 'long',
                   day: 'numeric',
                   month: 'long',
@@ -293,7 +325,9 @@ function TodayPlanInner() {
               <h3 class="font-display text-3xl tracking-tight">
                 {doneCount >= actionable.length - 1
                   ? 'Everything done. Rest well.'
-                  : 'Rest now. Tomorrow is a fresh page.'}
+                  : night
+                    ? `Rest now. Your day starts at ${clock(life.wake)}.`
+                    : 'Rest now. Tomorrow is a fresh page.'}
               </h3>
               {why && <p class="text-muted mt-2 italic">“{why}”</p>}
               <div class="mt-4">
@@ -352,7 +386,7 @@ function TodayPlanInner() {
         </a>
       )}
 
-      <TodayMind date={date} />
+      <TodayMind date={calendar} />
 
       {missed.length > 0 && (
         <div class="surface-muted rounded-2xl">

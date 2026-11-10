@@ -343,6 +343,24 @@ export function buildDay(ctx: DayContext): DayItem[] {
   return items.sort((a, b) => key(a.time) - key(b.time) || (a.kind === 'wake' ? -1 : 0));
 }
 
+/**
+ * Which day's plan is live at a moment. The calendar turns at midnight, but a day starts half an
+ * hour before wake-up or Fajr, whichever is earlier: until then the night still belongs to the
+ * day before (its bedtime may still be ahead), and nothing of the new day has happened yet.
+ */
+export function liveDay(
+  calendarDate: string,
+  nowMinutes: number,
+  wake: string,
+  fajr: number | null = null,
+): { date: string; night: boolean } {
+  const start = Math.min(toMinutes(wake), fajr ?? Infinity) - 30;
+  if (nowMinutes >= start) return { date: calendarDate, night: false };
+  const d = new Date(`${calendarDate}T12:00:00Z`);
+  d.setUTCDate(d.getUTCDate() - 1);
+  return { date: d.toISOString().slice(0, 10), night: true };
+}
+
 /** Minutes into the day, where the day starts half an hour before its first item. */
 function relativeTo(items: readonly DayItem[]) {
   const start = (items[0] ? toMinutes(items[0].time) : 0) - 30;
