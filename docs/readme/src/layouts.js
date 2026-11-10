@@ -376,7 +376,7 @@ const FACTS = [
   ['41', 'animated exercises for a small room'],
   ['1,474', 'foods, searchable offline'],
   ['155', 'dishes at 20 chains, ranked'],
-  ['392', 'tests on every change'],
+  ['397', 'tests on every change'],
 ];
 const BAND = (ph) => {
   const css = ph ? [381, 300] : [840, 196];
