@@ -21,7 +21,7 @@ describe('life profile', () => {
     const { lifeStore } = await import('../life');
     expect(
       lifeStore.restore({
-        name: 'Ali',
+        name: 'Sara',
         goals: ['get-stronger', 'fly'],
         wake: '25:99',
         meals: { breakfast: '07:15' },

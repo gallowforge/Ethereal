@@ -2,7 +2,7 @@ export const SITE = {
   name: 'Ethereal',
   tagline: "Become who you're working toward.",
   description:
-    'A calm coach for your whole self. Home workouts with animated demos that grow with you, a food diary with barcode scanning and 1,400+ halal-friendly foods, recipes and a day planner that hit your targets, a weight trend that sees through daily noise, and a clear next step every day. No sign-up, no ads, runs in your browser.',
+    'A calm coach for your whole self. Home workouts with animated demos that grow with you, a food diary with barcode scanning and 1,400+ foods, recipes and a day planner that hit your targets, a weight trend that sees through daily noise, and a clear next step every day. No sign-up, no ads, runs in your browser.',
   author: 'Ethereal',
   locale: 'en_US',
   twitter: '',

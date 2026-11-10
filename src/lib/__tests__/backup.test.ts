@@ -29,7 +29,7 @@ describe('backup', () => {
     const life = await import('../life');
 
     train.trainStore.patch({ setup: program.defaultSetup('2026-10-01', 2), voice: true });
-    life.lifeStore.patch({ name: 'Ali', goals: ['get-stronger'], wake: '06:30' });
+    life.lifeStore.patch({ name: 'Sara', goals: ['get-stronger'], wake: '06:30' });
     const body = await import('../body');
     body.saveMeasure({ date: '2026-10-01', neckCm: 40, waistCm: 103 });
     body.bodyStore.patch({ targetBodyFat: 17 });
@@ -75,7 +75,7 @@ describe('backup', () => {
     expect(train2.trainStore.get().setup?.level).toBe(2);
     expect(train2.trainStore.get().voice).toBe(true);
     expect(life2.lifeStore.get()).toMatchObject({
-      name: 'Ali',
+      name: 'Sara',
       goals: ['get-stronger'],
       wake: '06:30',
     });

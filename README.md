@@ -12,8 +12,9 @@ Most health apps do one thing, charge a subscription for it, and leave you to wo
 
 - **A living sky.** Today opens under a sky that follows your real time of day and your city's sun, from a lavender first light to a deep indigo night with the moon in tonight's phase. Tell it once when you wake, eat and work, and it does the planning.
 - **A Now card and a day track.** The Now card counts down to what is next: log lunch, start the workout, weigh in, or tick it done. Under it, your waking day is one fine line, filled up to now, with every moment as a dot in its own colour. Swipe a row to tick it off.
-- **Your whole day in one line.** Meals, medicines at the right time, prayer times calculated on the device (with the next one counting down under the sky), training placed clear of work and meals, winding down and sleep.
-- **No guilt.** Missed something? Catch me up gathers it: tick what you did, let the rest go. Fasting moves meals to suhoor and iftar and training to after iftar.
+- **Your whole day in one line.** Meals, medicines at the right time, training placed clear of work and meals, winding down and sleep.
+- **No guilt.** Missed something? Catch me up gathers it: tick what you did, let the rest go.
+- **Optional:** prayer times calculated on the device, and fasting schedules that move meals and training, for those who want them.
 
 <a href="https://gallowforge.github.io/Ethereal/train/#gh-dark-mode-only"><picture><source media="(max-width: 767px)" srcset="docs/readme/train-dark-phone.webp 2.835x"><source srcset="docs/readme/train-dark.webp 2x"><img src="docs/readme/train-dark.webp" width="840" alt="Train at home, starting small. A plan built from what you have: a towel, a chair or nothing. The workout player on a phone, with the real knee push-up demo moving through a rep, the form cues, a target of 8 to 15 against last time's 12 and 11, and the rep counter at 12. Behind it, Train on a desktop window: Session A is ready, five exercises, about 32 minutes." loading="lazy"></picture></a><a href="https://gallowforge.github.io/Ethereal/train/#gh-light-mode-only"><picture><source media="(max-width: 767px)" srcset="docs/readme/train-light-phone.webp 2.835x"><source srcset="docs/readme/train-light.webp 2x"><img src="docs/readme/train-light.webp" width="840" alt="Train at home, starting small. A plan built from what you have: a towel, a chair or nothing. The workout player on a phone, with the real knee push-up demo moving through a rep, the form cues, a target of 8 to 15 against last time's 12 and 11, and the rep counter at 12. Behind it, Train on a desktop window: Session A is ready, five exercises, about 32 minutes." loading="lazy"></picture></a>
 
@@ -41,7 +42,6 @@ Most health apps do one thing, charge a subscription for it, and leave you to wo
 - **66 high-protein recipes,** each built from the same food database as the diary, so what you cook is exactly what gets logged.
 - **The leanest order at 20 chains.** 155 menu items ranked by protein per calorie. Enter the calories you have left and **Best order** picks the highest-protein meal that fits.
 - **A day planner that hits your numbers.** It picks four recipes, at the portions that land on your calories and protein. Swap or lock any slot, then log the lot.
-- **Halal throughout.** No pork, gelatin or alcohol anywhere in the foods, recipes or menus.
 
 ## Why it is different
 

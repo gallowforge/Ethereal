@@ -83,15 +83,15 @@ test.describe('training', () => {
 
 test('the profile saves as you type and shows prayer times for a city', async ({ page }) => {
   await ready(page, '/you/');
-  await page.getByLabel('What should we call you?').fill('Ali');
+  await page.getByLabel('What should we call you?').fill('Sara');
   await page.getByRole('button', { name: /Get stronger/ }).click();
   await page.getByRole('button', { name: 'Knee pain' }).click();
   await page.getByLabel('Show prayer times in my day').check();
-  await page.getByLabel('City').selectOption('Kuwait City');
-  await expect(page.getByLabel('Calculation method')).toHaveValue('kuwait');
+  await page.getByLabel('City').selectOption('Toronto');
+  await expect(page.getByLabel('Calculation method')).toHaveValue('isna');
   await expect(page.getByRole('list', { name: "Today's prayer times" })).toContainText('Maghrib');
   await page.reload();
-  await expect(page.getByLabel('What should we call you?')).toHaveValue('Ali');
+  await expect(page.getByLabel('What should we call you?')).toHaveValue('Sara');
   await expect(page.getByRole('button', { name: 'Knee pain' })).toHaveAttribute(
     'aria-pressed',
     'true',
