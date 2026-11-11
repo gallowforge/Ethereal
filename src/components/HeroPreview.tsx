@@ -10,9 +10,9 @@ import { Ring } from './ui/Ring';
 /**
  * The home page's phone: a live tour of three screens, each playing its own small moment while
  * it is up. Today under the sky ticks a step off; the food ring counts down as the day's meals
- * go in; the trainer counts reps beside the moving figure. It moves on by itself, pauses while
- * you hover or touch it, and the dots underneath jump straight to a screen. With reduced
- * motion it rests on Today.
+ * go in; the trainer counts reps beside the moving figure. It moves on by itself, also while the
+ * pointer is over it or a finger on it, and the dots underneath jump straight to a screen. With
+ * reduced motion it rests on Today.
  */
 
 const SCREENS = [
@@ -227,7 +227,6 @@ export default function HeroPreview() {
   const [i, setI] = useState(0);
   const [t, setT] = useState(0);
   const [now, setNow] = useState(17 * 60 + 25);
-  const [hold, setHold] = useState(false);
   const [still, setStill] = useState(false);
   const started = useRef(0);
 
@@ -242,7 +241,7 @@ export default function HeroPreview() {
 
   // One clock for the tour: progress through the current screen, then the next one.
   useEffect(() => {
-    if (still || hold) return;
+    if (still) return;
     let raf = 0;
     started.current = performance.now() - t * SCREEN_MS;
     let last = -1;
@@ -272,7 +271,7 @@ export default function HeroPreview() {
       cancelAnimationFrame(raf);
       document.removeEventListener('visibilitychange', onVis);
     };
-  }, [i, still, hold]);
+  }, [i, still]);
 
   const screen: Screen = SCREENS[i]!.key;
   const go = (n: number) => {
@@ -281,11 +280,7 @@ export default function HeroPreview() {
   };
 
   return (
-    <div
-      class="hero-phone"
-      onPointerEnter={() => setHold(true)}
-      onPointerLeave={() => setHold(false)}
-    >
+    <div class="hero-phone">
       <div class="hero-phone-frame" aria-hidden="true">
         <div class="hero-phone-screen">
           {SCREENS.map((s, n) => (
