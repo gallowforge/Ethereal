@@ -211,7 +211,7 @@ function WeeklyReviewInner() {
   const w = (kg: number) => formatWeight(kg, profile.units, 1);
 
   return (
-    <div class="grid gap-6">
+    <div class="grid grid-cols-1 gap-6">
       <div class="flex flex-wrap items-center justify-between gap-3">
         <div class="flex items-center gap-2">
           <button
@@ -445,9 +445,9 @@ function WeeklyReviewInner() {
               <p class="text-subtle text-xs">
                 The foods that carried this week, by share of everything you logged.
               </p>
-              <ol class="mt-4 grid gap-2.5">
+              <ol class="mt-4 grid grid-cols-1 gap-2.5">
                 {top.map((f) => (
-                  <li key={f.name} class="grid gap-1 text-sm">
+                  <li key={f.name} class="grid grid-cols-1 gap-1 text-sm">
                     <div class="flex items-baseline justify-between gap-3">
                       <span class="truncate font-semibold">{f.name}</span>
                       <span class="text-subtle tabular shrink-0 text-xs">

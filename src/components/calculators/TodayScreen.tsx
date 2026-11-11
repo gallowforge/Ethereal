@@ -383,7 +383,7 @@ function TodayScreenInner() {
   }, [day.status, dayFood.length, date, today]);
 
   return (
-    <div class="food grid gap-5" ref={root} role="region" aria-labelledby="food-h">
+    <div class="food grid grid-cols-1 gap-5" ref={root} role="region" aria-labelledby="food-h">
       {/* One Food section: a heading, the streak and the weight trend, and a small day stepper. */}
       <header class="food-head">
         <div class="min-w-0">
@@ -571,7 +571,7 @@ function TodayScreenInner() {
 
       {/* Meals */}
       {tab === 'meals' && (
-        <div class="grid gap-4 lg:grid-cols-2">
+        <div class="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {MEALS.map((m) => {
             const items = dayFood.filter((e) => e.meal === m.key);
             const n = day.byMeal[m.key];
@@ -653,7 +653,7 @@ function TodayScreenInner() {
                   </div>
                 )}
                 {items.length > 0 ? (
-                  <ul class="stagger mt-3 grid gap-1">
+                  <ul class="stagger mt-3 grid grid-cols-1 gap-1">
                     {items.map((e, i) => (
                       <FoodRow key={e.id} entry={e} index={i} />
                     ))}

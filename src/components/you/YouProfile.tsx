@@ -50,7 +50,7 @@ function Card({
   return (
     <section
       id={id}
-      class="surface grid scroll-mt-24 content-start gap-5 p-5 sm:p-6"
+      class="surface grid scroll-mt-24 grid-cols-1 content-start gap-5 p-5 sm:p-6"
       aria-labelledby={`${id}-h`}
     >
       <div class="flex items-start gap-3">
@@ -405,7 +405,7 @@ function Health({ life, patch }: { life: Life; patch: (p: Partial<Life>) => void
       <div>
         <p class="label">Medicines and supplements</p>
         {life.meds.length > 0 && (
-          <ul class="mb-3 grid gap-2">
+          <ul class="mb-3 grid grid-cols-1 gap-2">
             {life.meds.map((m) => (
               <li key={m.id} class="surface-muted flex items-center gap-3 rounded-2xl p-3">
                 <Icon name="pill" size={18} class="text-brand-600 flex-none" />
@@ -747,14 +747,14 @@ function Links() {
 function YouProfileInner() {
   const [life, patch] = lifeStore.use();
   return (
-    <div class="grid gap-6">
+    <div class="grid grid-cols-1 gap-6">
       <Links />
-      <div class="grid items-start gap-6 lg:grid-cols-2">
-        <div class="grid gap-6">
+      <div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-2">
+        <div class="grid grid-cols-1 gap-6">
           <Goals life={life} patch={patch} />
           <Health life={life} patch={patch} />
         </div>
-        <div class="grid gap-6">
+        <div class="grid grid-cols-1 gap-6">
           <Day life={life} patch={patch} />
           <Faith life={life} patch={patch} />
           <CheckIns life={life} patch={patch} />

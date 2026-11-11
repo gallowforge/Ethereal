@@ -80,6 +80,9 @@ test.describe('plan and tracker', () => {
   test('settings exports a backup and share link round-trips', async ({ page, context }) => {
     await ready(page, '/settings/');
     await expect(page.getByText(/No active plan/)).toBeVisible();
+    // A card beside a taller one keeps its own shape: its buttons are not stretched to fill it.
+    const exportBackup = page.getByRole('button', { name: /export backup/i });
+    expect((await exportBackup.boundingBox())!.height).toBeLessThan(48);
     await page.getByLabel('Weight', { exact: true }).fill('70');
     const [download] = await Promise.all([
       page.waitForEvent('download'),

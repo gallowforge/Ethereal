@@ -145,7 +145,7 @@ function DataManagerInner() {
 
   return (
     <div class="grid gap-6 lg:grid-cols-2">
-      <section class="surface grid gap-5 p-5 sm:p-6" aria-label="Profile">
+      <section class="surface grid content-start gap-5 p-5 sm:p-6" aria-label="Profile">
         <h2 class="text-lg font-bold tracking-tight">Profile</h2>
         <ProfileFields profile={profile} update={update} idPrefix="st" />
         <NumberField
@@ -160,7 +160,7 @@ function DataManagerInner() {
         />
       </section>
 
-      <section class="surface grid gap-5 p-5 sm:p-6" aria-label="Plan settings">
+      <section class="surface grid content-start gap-5 p-5 sm:p-6" aria-label="Plan settings">
         <h2 class="text-lg font-bold tracking-tight">Plan</h2>
         {plan.active ? (
           <>
@@ -205,7 +205,7 @@ function DataManagerInner() {
         )}
       </section>
 
-      <section class="surface grid gap-5 p-5 sm:p-6" aria-label="Food diary">
+      <section class="surface grid content-start gap-5 p-5 sm:p-6" aria-label="Food diary">
         <h2 class="text-lg font-bold tracking-tight">Food diary</h2>
         <Segmented
           name="st-diet"
@@ -255,7 +255,11 @@ function DataManagerInner() {
         )}
       </section>
 
-      <section id="data" class="surface grid scroll-mt-24 gap-4 p-5 sm:p-6" aria-label="Your data">
+      <section
+        id="data"
+        class="surface grid scroll-mt-24 content-start gap-4 p-5 sm:p-6"
+        aria-label="Your data"
+      >
         <h2 class="text-lg font-bold tracking-tight">Your data</h2>
         <p class="text-muted text-sm">
           {log.entries.length} weigh-in{log.entries.length === 1 ? '' : 's'} and {diary.food.length}{' '}
@@ -314,7 +318,10 @@ function DataManagerInner() {
       </section>
 
       {GOATCOUNTER_CODE && (
-        <section class="surface grid gap-4 p-5 sm:p-6" aria-label="Anonymous page counts">
+        <section
+          class="surface grid content-start gap-4 p-5 sm:p-6"
+          aria-label="Anonymous page counts"
+        >
           <h2 class="text-lg font-bold tracking-tight">Anonymous page counts</h2>
           <label class="flex items-start gap-3 text-sm">
             <input
@@ -338,7 +345,10 @@ function DataManagerInner() {
         </section>
       )}
 
-      <section class="surface grid gap-4 p-5 sm:p-6" aria-label="Switch from another app">
+      <section
+        class="surface grid content-start gap-4 p-5 sm:p-6"
+        aria-label="Switch from another app"
+      >
         <h2 class="text-lg font-bold tracking-tight">Switching from another app?</h2>
         <p class="text-muted text-sm">
           Bring your history with you. Export a CSV from MyFitnessPal, Lose It!, Cronometer or a
@@ -401,7 +411,7 @@ function DataManagerInner() {
         )}
       </section>
 
-      <section class="surface grid gap-4 p-5 sm:p-6" aria-label="Reminders">
+      <section class="surface grid content-start gap-4 p-5 sm:p-6" aria-label="Reminders">
         <h2 class="text-lg font-bold tracking-tight">Reminders</h2>
 
         <p class="text-muted text-sm">
@@ -463,7 +473,7 @@ function DataManagerInner() {
         </button>
       </section>
 
-      <section class="surface grid gap-4 p-5 sm:p-6" aria-label="App">
+      <section class="surface grid content-start gap-4 p-5 sm:p-6" aria-label="App">
         <h2 class="text-lg font-bold tracking-tight">Install as an app</h2>
         <p class="text-muted text-sm">
           Ethereal works offline and can sit on your home screen like any app, with no app store and

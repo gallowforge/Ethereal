@@ -88,21 +88,30 @@ test.describe('food diary', () => {
   });
 
   test('custom food is saved and reusable', async ({ page }) => {
+    // A long name on purpose: its row has to shorten the name, not widen the page on a phone.
+    const name = 'Lasagne al forno with a slow beef ragu, bechamel and far too much cheese';
     await ready(page, '/today/');
     await page.getByRole('region', { name: 'Dinner' }).getByRole('button', { name: 'Add' }).click();
     const dialog = page.getByRole('dialog');
     await dialog.getByRole('radio', { name: 'My foods' }).check();
-    await dialog.getByLabel('Name').fill('Lasagne');
+    await dialog.getByLabel('Name').fill(name);
     await dialog.getByLabel('Serving').fill('350');
     await dialog.getByLabel('Calories').fill('520');
     await dialog.getByLabel('Protein').fill('28');
     await dialog.getByRole('button', { name: /Save and use/ }).click();
-    await expect(dialog.getByRole('heading', { name: 'Lasagne' })).toBeVisible();
+    await expect(dialog.getByRole('heading', { name })).toBeVisible();
     await dialog.getByRole('button', { name: /^Add 350 g$/ }).click();
-    await expect(page.getByRole('region', { name: 'Dinner' }).getByText('Lasagne')).toBeVisible();
-    await expect(
-      page.getByRole('region', { name: 'Dinner' }).getByText('520').first(),
-    ).toBeVisible();
+    const dinner = page.getByRole('region', { name: 'Dinner' });
+    await expect(dinner.getByText(name)).toBeVisible();
+    await expect(dinner.getByText('520').first()).toBeVisible();
+    // The row's delete button is still on screen, and nothing sticks out of the page.
+    await expect(dinner.getByRole('button', { name: `Delete ${name}` })).toBeInViewport();
+    expect(
+      await page.evaluate(() => {
+        const root = document.documentElement;
+        return root.scrollWidth - root.clientWidth;
+      }),
+    ).toBe(0);
   });
 });
 
