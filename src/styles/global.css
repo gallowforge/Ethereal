@@ -2821,8 +2821,18 @@
   .home-float-a {
     left: -4rem;
   }
+  /* Below 1440 the page's side margin is narrower than the card's overhang at the phone's corner, so
+     the card was cut by the window's edge; pulled in, it would cover the dots under the phone or the
+     phone's own buttons. There it sits just below the dots instead, still inside the window. */
+  .home-float-b {
+    right: -0.75rem;
+    bottom: -4.25rem;
+  }
+}
+@media (min-width: 1440px) {
   .home-float-b {
     right: -2.25rem;
+    bottom: 0.5rem;
   }
 }
 .home-float-icon {
