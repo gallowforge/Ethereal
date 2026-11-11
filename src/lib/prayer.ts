@@ -168,11 +168,14 @@ export function prayerTimes(
   };
 }
 
-/** A suggested method for a place, from rough regional boundaries. */
+/**
+ * A suggested method for a place, from rough regional boundaries. Narrow regions are asked
+ * before the wide ones that contain them, and where two narrow ones overlap the first wins.
+ */
 export function suggestMethod(lat: number, lon: number): PrayerMethod {
-  if (lat > 28.5 && lat < 30.2 && lon > 46.5 && lon < 48.6) return 'kuwait';
   if (lat > 24.4 && lat < 26.3 && lon > 50.7 && lon < 51.7) return 'qatar';
   if (lat > 22.5 && lat < 26.5 && lon > 51.5 && lon < 56.5) return 'dubai';
+  if (lat > 28.5 && lat < 30.2 && lon > 46.5 && lon < 48.6) return 'kuwait';
   if (lat > 16 && lat < 32.5 && lon > 34.5 && lon < 56) return 'makkah';
   if (lat > 22 && lat < 31.7 && lon > 24.7 && lon < 36) return 'egypt';
   if (lat > 35.8 && lat < 42.2 && lon > 25.6 && lon < 44.9) return 'turkey';

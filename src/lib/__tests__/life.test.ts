@@ -26,7 +26,7 @@ describe('life profile', () => {
         wake: '25:99',
         meals: { breakfast: '07:15' },
         meds: [{ name: 'Vitamin D', rule: 'nonsense', times: ['21:00', 'later'] }, 'junk'],
-        prayer: { on: true, lat: 200, lon: 47.9, method: 'kuwait' },
+        prayer: { on: true, lat: 200, lon: -79.4, method: 'isna' },
         weighDay: 9,
       }),
     ).toBe(true);
@@ -37,7 +37,8 @@ describe('life profile', () => {
     expect(life.meds).toHaveLength(1);
     expect(life.meds[0]).toMatchObject({ name: 'Vitamin D', rule: 'any', times: ['21:00'] });
     expect(life.prayer.lat).toBeNull();
-    expect(life.prayer.lon).toBe(47.9);
+    expect(life.prayer.lon).toBe(-79.4);
+    expect(life.prayer.method).toBe('isna');
     expect(life.weighDay).toBe(5);
     expect(lifeStore.restore('nope')).toBe(false);
   });

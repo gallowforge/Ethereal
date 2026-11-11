@@ -1,10 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { METHODS, prayerTimes, suggestMethod, type PrayerMethod } from '../prayer';
 
-const hhmm = (d: Date, offsetH: number) => {
-  const m = Math.round((d.getTime() / 60000 + offsetH * 60) % 1440);
-  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
-};
+/** Minutes after local midnight, in a zone a fixed number of hours from UTC. */
+const localMinutes = (d: Date, offsetH: number) => (d.getTime() / 60000 + offsetH * 60) % 1440;
 const mins = (a: Date, b: Date) => (b.getTime() - a.getTime()) / 60000;
 
 describe('prayer times', () => {
@@ -15,14 +13,15 @@ describe('prayer times', () => {
     expect(Math.abs(utc - (11 * 60 + 43.6))).toBeLessThan(1);
   });
 
-  it('agrees with a hand calculation for Kuwait City', () => {
-    // 1 November, UTC+3: noon = 12:00 − (47.98° × 4 min − 180 min) − 16.4 min ≈ 11:31.7; with
-    // declination −14.4° the sunrise hour angle is 82.7°, 5 h 31 min before noon ≈ 06:01.
-    const t = prayerTimes('2026-11-01', 29.3759, 47.9774, { method: 'kuwait' });
-    const sunrise = hhmm(t.sunrise, 3);
-    const dhuhr = hhmm(t.dhuhr, 3);
-    expect(dhuhr).toMatch(/^11:3[1-3]$/);
-    expect(sunrise).toMatch(/^(05:59|06:0[0-2])$/);
+  it('agrees with an independent calculation for Osaka', () => {
+    // 1 November, at UTC+9 all year. Worked from the Meeus series (Astronomical Algorithms,
+    // ch. 25 and 28), not from this engine's own formulas. The equation of time is 16.46 min, so
+    // noon = 12:00 − (135.5023° × 4 min − 540 min) − 16.46 min = 11:41.53. At sunrise the
+    // declination is −14.33°; at 34.69° N the sun is 0.833° below the horizon at an hour angle
+    // of 80.88°, which is 5 h 23.51 min before noon: 06:18.02.
+    const t = prayerTimes('2026-11-01', 34.6937, 135.5023, { method: 'mwl' });
+    expect(Math.abs(localMinutes(t.dhuhr, 9) - (11 * 60 + 41.53))).toBeLessThan(0.5);
+    expect(Math.abs(localMinutes(t.sunrise, 9) - (6 * 60 + 18.02))).toBeLessThan(0.5);
   });
 
   it('keeps the order of the day and midday between sunrise and sunset', () => {
@@ -55,11 +54,22 @@ describe('prayer times', () => {
     expect(t.isha.getTime()).toBeGreaterThan(t.maghrib.getTime());
   });
 
-  it('suggests local methods', () => {
-    expect(suggestMethod(29.37, 47.97)).toBe('kuwait');
-    expect(suggestMethod(21.39, 39.86)).toBe('makkah');
-    expect(suggestMethod(25.2, 55.27)).toBe('dubai');
-    expect(suggestMethod(51.5, -0.12)).toBe('mwl');
-    expect(suggestMethod(40.7, -74)).toBe('isna');
+  it('suggests the method of the region a place is in', () => {
+    // One place per method the suggestion can return, in the order of the method list. The
+    // Qatar row sits where two regions overlap, so it also pins down which one is asked first.
+    const places: Array<[PrayerMethod, number, number]> = [
+      ['mwl', 51.5, -0.1],
+      ['mwl', 34.7, 135.5],
+      ['isna', 43.7, -79.4],
+      ['egypt', 30.0, 31.2],
+      ['makkah', 21.4, 39.9],
+      ['karachi', 24.9, 67.0],
+      ['kuwait', 29.5, 47.5],
+      ['qatar', 25.3, 51.6],
+      ['dubai', 25.2, 55.3],
+      ['turkey', 41.0, 29.0],
+      ['singapore', 1.4, 103.8],
+    ];
+    for (const [method, lat, lon] of places) expect(suggestMethod(lat, lon)).toBe(method);
   });
 });

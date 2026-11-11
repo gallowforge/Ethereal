@@ -3,8 +3,10 @@ import { buildDay, liveDay, missedItems, nowItem, workoutSlot, type DayContext }
 import { DEFAULT_LIFE, toMinutes, type Life } from '../life';
 import { prayerTimes } from '../prayer';
 
-// Kuwait is UTC+3 all year: fix the zone so tests do not depend on the machine.
-const kuwait = (d: Date) => (d.getUTCHours() * 60 + d.getUTCMinutes() + 180) % 1440;
+// The prayer fixture is Osaka, which keeps UTC+9 all year: a fixed zone, so the tests do not
+// depend on the machine's. In early November its Isha falls across the usual evening workout.
+const fixedZone = (d: Date) => (d.getUTCHours() * 60 + d.getUTCMinutes() + 540) % 1440;
+const prayersOn = (date: string) => prayerTimes(date, 34.6937, 135.5023, { method: 'mwl' });
 
 const ctx = (over: Partial<DayContext> = {}, life: Partial<Life> = {}): DayContext => ({
   date: '2026-11-06',
@@ -19,7 +21,7 @@ const ctx = (over: Partial<DayContext> = {}, life: Partial<Life> = {}): DayConte
   weighed: false,
   photoDue: false,
   ticks: new Set(),
-  minutesOf: kuwait,
+  minutesOf: fixedZone,
   ...over,
 });
 
@@ -67,7 +69,7 @@ describe('today plan', () => {
   });
 
   it('adds prayers and medicine doses at their times', () => {
-    const prayers = prayerTimes('2026-11-06', 29.3759, 47.9774, { method: 'kuwait' });
+    const prayers = prayersOn('2026-11-06');
     const day = buildDay(
       ctx(
         { prayers },
@@ -83,8 +85,9 @@ describe('today plan', () => {
     ]);
     const med = day.find((i) => i.kind === 'med');
     expect(med).toMatchObject({ time: '08:00', title: 'Vitamin D', detail: '1000 IU, with food' });
-    // The workout is never on top of a prayer.
+    // The workout is never on top of a prayer: Isha takes the usual evening slot, so it moved.
     const w = day.find((i) => i.kind === 'workout')!;
+    expect(w.time).not.toBe(buildDay(ctx()).find((i) => i.kind === 'workout')!.time);
     for (const p of day.filter((i) => i.kind === 'prayer')) {
       const pm = toMinutes(p.time);
       expect(
@@ -94,7 +97,7 @@ describe('today plan', () => {
   });
 
   it('moves meals to suhoor and iftar, and training after iftar, when fasting', () => {
-    const prayers = prayerTimes('2026-11-06', 29.3759, 47.9774, { method: 'kuwait' });
+    const prayers = prayersOn('2026-11-06');
     const day = buildDay(ctx({ prayers }, { fasting: true }));
     const iftar = day.find((i) => i.title === 'Iftar')!;
     const maghrib = day.find((i) => i.title === 'Maghrib')!;
